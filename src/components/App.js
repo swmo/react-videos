@@ -11,7 +11,7 @@ class App extends React.Component {
     
     callbackOnSearchSubmit = async (term) => {
         if(term === '') {
-            this.setState({videos: []});
+            this.setState({videos: [], videoSelected: null});
         }
         else {
             const response = await youtube.get('/search',{
@@ -21,8 +21,12 @@ class App extends React.Component {
                 key: 'AIzaSyBaDdIj5cuPqs-oHEIkiDKVDb_lqVBFNrI',
                 q: term
             }});
+
             console.log('set videos:');
-            this.setState({videos: response.data.items});
+            this.setState({
+                videos: response.data.items, 
+                videoSelected: response.data.items[0] 
+            });
         }
     }
 
@@ -30,6 +34,10 @@ class App extends React.Component {
         this.setState({videoSelected: video});
         console.log('set video:');
         console.log(video);
+    }
+
+    componentDidMount = () => {
+        this.callbackOnSearchSubmit('news')
     }
 
     render(){
